@@ -1,18 +1,16 @@
 import { cn } from '@/lib/utils'
 import 'highlight.js/styles/github-dark.css'
-import hljs from 'highlight.js/lib/core'
-import json from 'highlight.js/lib/languages/json'
 import beautify from 'simply-beautiful'
-
-hljs.registerLanguage('json', json)
+import Highlight from 'react-highlight'
+import { CopyButton } from '@/components/copy-button'
 
 export const CodeHighlight = ({ code, className }) => {
-  //   console.log(beautify)
-  const newClass = cn('text-xs font-mono', className)
+  const newClass = cn('text-xs font-mono hljs relative', className)
   return (
-    <pre className={newClass}>
-      <code className='theme-github-dark'>{beautify.json(code)}</code>
-    </pre>
+    <div className={newClass}>
+      <CopyButton value={beautify.json(code)} className="fixed right-12 top-16" />
+      <Highlight language='json'>{beautify.json(code)}</Highlight>
+    </div>
   )
 }
 

@@ -129,6 +129,24 @@ const FormApi = () => {
     setIsDialogVerifyOpen(!isDialogVerifyOpen)
   }
 
+  /**
+   *
+   *  Handle Save on-chain
+   *
+   */
+  const handleSaveOnChain = async() => {
+    console.log('Save on-chain');
+    const data = await getData();
+    const resultSave = await fetch('https://api.zklinker.site/proof',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    console.log(resultSave);
+  }
+
   useEffect(() => {
     const delayInput = setTimeout(() => {
       console.log('debounce')
@@ -201,12 +219,14 @@ const FormApi = () => {
             <DialogHeader>
               <DialogTitle>Success Fetching Data</DialogTitle>
             </DialogHeader>
-            <div className='relative w-[inherit] overflow-x-scroll max-h-[40vh]'>
-              <CodeHighlight code={JSON.stringify(verifyResult.data)} language='json' />
-            </div>
+            <CodeHighlight
+              code={JSON.stringify(verifyResult.data)}
+              language='json'
+              className='relative w-[inherit] max-h-[40vh] overflow-x-hidden'
+            />
             <DialogHeader>
               <Separator className='my-4' />
-              <Button variant='default' className='w-full'>
+              <Button variant='default' className='w-full' onClick={handleSaveOnChain}>
                 Save on-chain
               </Button>
             </DialogHeader>
