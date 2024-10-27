@@ -19,12 +19,14 @@ const methodOptions = [
   { value: 'DELETE', label: 'DELETE', class: 'method delete' }
 ]
 
-const FormApi = () => {
+const FormApi = (params) => {
+  const { defaultUrl } = params
+
   const [headers, setHeaders] = useState([
     { key: 'Accept', value: '*/*', active: true },
     { key: 'Accept-Encoding', value: 'gzip, deflate, br', active: true }
   ])
-  const [url, setUrl] = useState('https://api.coindesk.com/v1/bpi/currentprice.json')
+  const [url, setUrl] = useState(defaultUrl)
   const [method, setMethod] = useState('GET')
   const [body, setBody] = useState('')
   const [debounce, setDebounce] = useState(null)
@@ -134,17 +136,17 @@ const FormApi = () => {
    *  Handle Save on-chain
    *
    */
-  const handleSaveOnChain = async() => {
-    console.log('Save on-chain');
-    const data = await getData();
-    const resultSave = await fetch('https://api.zklinker.site/proof',{
+  const handleSaveOnChain = async () => {
+    console.log('Save on-chain')
+    const data = await getData()
+    const resultSave = await fetch('https://api.zklinker.site/proof', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    });
-    console.log(resultSave);
+    })
+    console.log(resultSave)
   }
 
   useEffect(() => {

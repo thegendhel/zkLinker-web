@@ -7,8 +7,14 @@ import './styles.css'
 
 // dynamic import scene
 import React, { Suspense } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const HomePage = () => {
+  // console.log(useLocation())
+  const location = useLocation();
+  const params = new URLSearchParams(location?.search)?.get('url') || 'https://dogapi.dog/api/v2/breeds';
+  console.log(params)
+
   return (
     <Container className='flex-col mt-16'>
 
@@ -23,7 +29,7 @@ const HomePage = () => {
       <div className='rounded-[0.5rem] border bg-background shadow  w-full h-auto'>
         <div className='space-y-6 p-10 pb-16'>
           <div className='flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
-            <FormApi />
+            <FormApi defaultUrl={params}/>
           </div>
         </div>
       </div>
