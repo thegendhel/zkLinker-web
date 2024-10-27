@@ -11,10 +11,13 @@ const Header = () => {
           <div className='flex justify-center'>
             <MainNav />
           </div>
-          {/* <CustomConnectButton /> */}
+
+          <Link to={'https://www.reclaimprotocol.org/'} target='_blank'>
+            <img className='inline-block h-8' src='/assets/reclaim.png' />
+          </Link>
         </div>
       </div>
-      <hr className="m-0 h-px w-full border-none bg-gradient-to-r from-neutral-200/0 via-neutral-200/30 to-neutral-200/0"/>
+      <hr className='m-0 h-px w-full border-none bg-gradient-to-r from-neutral-200/0 via-neutral-200/30 to-neutral-200/0' />
     </header>
   )
 }

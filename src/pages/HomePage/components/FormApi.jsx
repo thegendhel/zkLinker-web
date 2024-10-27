@@ -11,6 +11,7 @@ import verifyFetch from '@/lib/VerifyFetch.js'
 import { LoaderCircle } from 'lucide-react'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import CodeHighlight from '@/components/CodeHighlight'
+import { CopyButton } from '@/components/copy-button'
 
 const methodOptions = [
   { value: 'GET', label: 'GET', class: 'method get' },
@@ -32,6 +33,7 @@ const FormApi = (params) => {
   const [debounce, setDebounce] = useState(null)
   const [verifyResult, setVerifyResult] = useState(null)
   const [formLoading, setFormLoading] = useState(false)
+  const [proofResult, setProofResult] = useState(null)
   const [isDialogVerifyOpen, setIsDialogVerifyOpen] = useState(false)
 
   const formRef = useRef(null)
@@ -138,6 +140,8 @@ const FormApi = (params) => {
    */
   const handleSaveOnChain = async () => {
     console.log('Save on-chain')
+    setProofResult(null)
+    setFormLoading(true)
     const data = await getData()
     const resultSave = await fetch('https://api.zklinker.site/proof', {
       method: 'POST',
@@ -145,8 +149,9 @@ const FormApi = (params) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    })
-    console.log(resultSave)
+    }).then((res) => res.json())
+    setFormLoading(false)
+    setProofResult(resultSave)
   }
 
   useEffect(() => {
@@ -155,7 +160,7 @@ const FormApi = (params) => {
       setDebounce({ method, headers, body })
     }, 100)
     return () => clearTimeout(delayInput)
-  }, [method, headers, body, url, formLoading, verifyResult, isDialogVerifyOpen])
+  }, [method, headers, body, url, formLoading, verifyResult, isDialogVerifyOpen, proofResult])
 
   return (
     <div className='flex flex-col items-center w-full'>
@@ -228,7 +233,32 @@ const FormApi = (params) => {
             />
             <DialogHeader>
               <Separator className='my-4' />
-              <Button variant='default' className='w-full' onClick={handleSaveOnChain}>
+
+              {proofResult !== null && (
+                <DialogDescription className='text-success'>
+                  {proofResult.success === true && (proofResult?.data?.data?.id || proofResult?.data?.id) && (
+                    <div>
+                      <div className='flex w-full items-center space-x-2'>
+                        <Input
+                          className='w-full'
+                          value={window?.location?.origin + '/tx/' + (proofResult?.data?.data?.id || proofResult?.data?.id)}
+                          readOnly
+                        />
+                        <CopyButton value={window?.location?.origin + '/tx/' + (proofResult?.data?.data?.id || proofResult?.data?.id)}
+                          className='border min-w[100px]'
+                        />
+                      </div>
+                      <p className='text-green-500 text-center mb-4'>Proof successfully saved on-chain</p>
+                    </div>
+                  )}
+                  {(proofResult.success === false || !(proofResult?.data?.data?.id || proofResult?.data?.id)) && (
+                    <p className='text-error'>Proof failed to save on-chain</p>
+                  )}
+                </DialogDescription>
+              )}
+
+              <Button variant='default' className='w-full' onClick={handleSaveOnChain} disabled={formLoading}>
+                {formLoading && <LoaderCircle className='w-6 h-6 animate-spin me-2' />}
                 Save on-chain
               </Button>
             </DialogHeader>
