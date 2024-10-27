@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom'
 const HomePage = () => {
   // console.log(useLocation())
   const location = useLocation();
-  const params = new URLSearchParams(location?.search)?.get('url') || 'https://dogapi.dog/api/v2/breeds';
+  const params = new URLSearchParams(location?.search)?.get('url') || 'https://archive.org/metadata/principleofrelat00eins';
   console.log(params)
 
   return (
